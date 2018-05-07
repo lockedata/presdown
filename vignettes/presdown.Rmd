@@ -1,6 +1,6 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "presdown"
+author: "Steph Locke"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -15,51 +15,37 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+# presdown
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+Build an online directory of slides in a way that's friendly to you and continuous integration! You use presdown to generate slides that haven't been generated before, incorporating dependencies listed in the DESCRIPTION file and you can even grab the list based on a directory of presentations.
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+Key functionality is:
 
-## Vignette Info
+- Use generic render to md for multi-output potential
+- Put images in the correct directories and have references to them that work
+- Refer to a single directory of (generally named) js libraries so that you can manage upgrades to libraries at your discretion
+- Optionally, use pandoc to generate (light) html pages
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+Anticipated functions: 
 
-## Styles
+- `setup_dir()`: Create expected directories
+- `catalogue_dependencies()`: Get dependencies and add to a DESCRIPTION
+- `install_presentationjs()`: Grab web dependencies and install into a `static/[presentationlibname]/` dir plus a corresponding pandoc template for use
+- `generate_mdfiles()`: Identify all presentations with modified dates later than their corresponding md versions and generate them
+- `generate_htmlfiles()`: Identify all md files with modified dates later than their corresponding html versions and generate them
+- `use_build_basic()`: Use our boilerplate build script that installs missing dependencies and renders necessary files
+- `use_build_git()`: Use our boilerplate build script that installs missing dependencies and renders necessary files, then commits changes to git using a `[ci skip]` prefix
+- `use_travis()`: Use our boilerplate travis script for using travis to generate your markdown files
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+Anticipated addins:
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+- New presentation for incorporating metadata etc in setup
+- Render process helper
 
-## Figures
+Important considerations: 
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+- Conforms to (optionally) Hugo/Jekyll expected structures
+- Aimed at incremental CI/CD, not full validation
+    + Add a drop of md files to trigger everything, or exclude them from git
+- Expects you to be able to manage your javascript dependencies
+- Relies on pandoc template files
