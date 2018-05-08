@@ -13,7 +13,7 @@ Anticipated functions:
 
 - `setup_dir()`: Create expected directories
 - `catalogue_dependencies()`: Get dependencies and add to a DESCRIPTION
-- `install_presentationjs()`: Grab web dependencies and install into a `static/[presentationlibname]/` dir plus a corresponding pandoc template for use
+- `install_presentationjs()`: Grab web dependencies (potentially as a git submodule) and install into a `static/[presentationlibname]/` dir plus a corresponding pandoc template for use
 - `generate_mdfiles()`: Identify all presentations with modified dates later than their corresponding md versions and generate them
 - `generate_htmlfiles()`: Identify all md files with modified dates later than their corresponding html versions and generate them
 - `use_build_basic()`: Use our boilerplate build script that installs missing dependencies and renders necessary files
@@ -29,6 +29,6 @@ Important considerations:
 
 - Conforms to (optionally) Hugo/Jekyll expected structures
 - Aimed at incremental CI/CD, not full validation
-    + Add a drop of md files to trigger everything, or exclude them from git
+    + Delete and commit the md files to trigger everything, or exclude them from git generally to always do a build
 - Expects you to be able to manage your javascript dependencies
 - Relies on pandoc template files
